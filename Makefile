@@ -2,7 +2,7 @@ CC=clang
 PROG=steve
 OBJS=main.o char.o
 CFLAGS=-g -ggdb $(shell pkg-config --cflags glfw3)
-LDLIBS=$(shell pkg-config --libs glfw3)
+LDLIBS=$(shell pkg-config --static --libs glfw3)
 
 all: $(PROG)
 

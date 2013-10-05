@@ -204,10 +204,10 @@ int main(int argc, char** argv) {
 		exit(1);
 	}
 
-  init();
-
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, key);
+
+  init();
 
 	unsigned int lastTime = getTime(), time;
 
