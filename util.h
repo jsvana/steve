@@ -14,13 +14,19 @@
 #define FALSE 0
 #endif
 
+#define RIGHT 3
+#define UP 2
+#define LEFT 1
+#define DOWN 0
+
 typedef struct {
   GLdouble x, y;
 } Point;
 
 typedef struct {
   GLfloat r, g, b;
-} Color;
+	unsigned char walkable;
+} TileColor;
 
 typedef struct {
   Point points[4];
@@ -28,8 +34,23 @@ typedef struct {
 } Tile;
 
 typedef struct {
-	Color colors[COLORS_PER_PALETTE];
+	TileColor colors[COLORS_PER_PALETTE];
 	int id;
 } Palette;
+
+typedef struct {
+	void *data;
+	size_t elemSize;
+	int top;
+	int maxSize;
+} Stack;
+
+Stack *stackCreate(int size, size_t elemSize);
+int stackSize(Stack *s);
+void *stackData(Stack *s);
+int stackPush(Stack *s, void *val);
+void *stackPeek(Stack *s);
+void *stackPop(Stack *s);
+void stackDestroy(Stack *s);
 
 #endif

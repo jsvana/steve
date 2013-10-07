@@ -13,6 +13,7 @@
 typedef struct {
 	Tile *data;
 	Point position;
+	int dir;
 	int palette;
 } Char;
 

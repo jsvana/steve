@@ -1,7 +1,7 @@
 #include "char.h"
 
-#define CHAR_TILE_WIDTH 5
-#define CHAR_TILE_HEIGHT 5
+#define CHAR_TILE_WIDTH 4
+#define CHAR_TILE_HEIGHT 4
 
 #define SPRITE_TILE_COUNT 162
 
@@ -189,6 +189,10 @@ Char *createChar() {
 	c->position.x = 10.0f;
 	c->position.y = 10.0f;
 
+	c->dir = DOWN;
+
+	c->palette = 0;
+
 	c->data = malloc(sizeof(Tile) * SPRITE_TILE_COUNT);
 
 	for (i = 0; i < SPRITE_TILE_COUNT; i++) {
@@ -200,13 +204,53 @@ Char *createChar() {
 
 void renderChar(Char *character, Palette *palettes) {
 	int i;
-	Color c;
+	GLfloat x = character->position.x, y = character->position.y;
+	TileColor c;
 	Palette p = palettes[character->palette];
 	Tile t;
 
 	glPushMatrix();
-	glTranslatef(character->position.x, character->position.y, 0.0f);
 
+	glTranslatef(x, y, 0);
+	glRotatef(character->dir * 90, 0, 0, 1);
+
+	glBegin(GL_TRIANGLES);
+	c = p.colors[1];
+	glColor3f(c.r, c.g, c.b);
+	glVertex2f(-10, -4);
+	glVertex2f(0, 10);
+	glVertex2f(10, -4);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	c = p.colors[2];
+	glColor3f(c.r, c.g, c.b);
+	glVertex2f(-10, -4);
+	glVertex2f(10, -4);
+	glVertex2f(10, -6);
+	glVertex2f(-10, -6);
+	glEnd();
+
+	//glTranslatef(10, 10, 0);
+	/*
+	glBegin(GL_QUADS);
+	c = p.colors[1];
+	glColor3f(c.r, c.g, c.b);
+	glVertex2f(x - 10, y + 10);
+	glVertex2f(x + 10, y + 10);
+	glVertex2f(x + 10, y - 10);
+	glVertex2f(x - 10, y - 10);
+	c = p.colors[2];
+	glColor3f(c.r, c.g, c.b);
+	glVertex2f(x - 8, y + 8);
+	glVertex2f(x + 8, y + 8);
+	glVertex2f(x + 8, y - 8);
+	glVertex2f(x - 8, y - 8);
+	glEnd();
+
+	glTranslatef(x / 2, y / 2, 0.0f);
+
+	glPopMatrix();
 	glBegin(GL_QUADS);
 	for (i = 0; i < SPRITE_TILE_COUNT; i++) {
 		t = character->data[i];
@@ -218,13 +262,14 @@ void renderChar(Char *character, Palette *palettes) {
 		glVertex2f(t.points[3].x, t.points[3].y);
 	}
 	glEnd();
+	*/
 
 	glPopMatrix();
 }
 
 void moveChar(Char *c, float x, float y) {
-	c->position.x += 5 * x;
-	c->position.y += 5 * y;
+	c->position.x += x;
+	c->position.y += y;
 }
 
 void freeChar(Char *c) {
